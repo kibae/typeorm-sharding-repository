@@ -4,7 +4,7 @@ import { ShardingType } from './types/typeorm-sharding.type';
 export interface RangeShardingEntityOptions<ENTITY, KEY_TYPE> extends EntityOptions {
     type: ShardingType.RANGE;
     findShard: (entity: ENTITY, minKey: KEY_TYPE, maxKey: KEY_TYPE) => boolean;
-    findShardById: (entity: any, minKey: KEY_TYPE, maxKey: KEY_TYPE) => boolean;
+    findShardById: (id: any, minKey: KEY_TYPE, maxKey: KEY_TYPE) => boolean;
 }
 
 /*
