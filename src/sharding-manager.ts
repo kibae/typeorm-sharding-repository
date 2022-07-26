@@ -7,6 +7,11 @@ import { DataSourceOptions } from 'typeorm/data-source/DataSourceOptions';
 export class ShardingManager {
     public readonly dataSources: DataSource[] = [];
 
+    private _destroyed: boolean = false;
+    public get destroyed(): boolean {
+        return this._destroyed;
+    }
+
     protected constructor(public readonly options: ShardingDataSourceOptions) {}
 
     protected async init(): Promise<this> {
@@ -15,8 +20,18 @@ export class ShardingManager {
         this.dataSources.push(
             ...(await Promise.all(
                 //initialize all datasource
-                this.options.shards.map((dataSource) => {
-                    return new DataSource({ ...dataSource, ...config } as DataSourceOptions).initialize();
+                this.options.shards.map((opt) => {
+                    return new Promise<DataSource>(async (resolve, reject) => {
+                        try {
+                            const { onInitialize, ...options } = opt;
+                            const dataSource = await new DataSource({ ...options, ...config } as DataSourceOptions).initialize();
+                            if (onInitialize) await onInitialize(dataSource);
+
+                            resolve(dataSource);
+                        } catch (e) {
+                            reject(e);
+                        }
+                    });
                 })
             ))
         );
@@ -55,5 +70,14 @@ export class ShardingManager {
             if (idx < 0) return this.dataSources[this.dataSources.length - 1];
             return this.dataSources[idx];
         } else throw new Error('ShardingManager: Unsupported sharding type');
+    }
+
+    async destroy() {
+        this._destroyed = true;
+        await Promise.all(
+            this.dataSources.map((dataSource) => {
+                dataSource.destroy();
+            })
+        );
     }
 }

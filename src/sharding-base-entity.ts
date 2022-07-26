@@ -80,7 +80,13 @@ export class ShardingBaseEntity {
         entities: DeepPartial<T> | DeepPartial<T>[],
         options?: SaveOptions
     ): Promise<T | T[]> {
-        return this.wrapArray<T>(entities, (list) => Promise.all(list.map((item) => this.getRepository(item).save(item, options))));
+        return this.wrapArray<T>(entities, (list) =>
+            Promise.all(
+                list.map((item) => {
+                    return this.getRepository(item).save(this.getRepository(item).create(item), options);
+                })
+            )
+        );
     }
 
     ////
@@ -329,7 +335,8 @@ export class ShardingBaseEntity {
     /************************************************/
     private static _shardingManager: ShardingManager;
     private static shardingManager(): ShardingManager {
-        if (!this._shardingManager) this._shardingManager = Reflect.getMetadata('SHARDING_MANAGER', this);
+        if (!this._shardingManager || this._shardingManager.destroyed)
+            this._shardingManager = Reflect.getMetadata('SHARDING_MANAGER', this);
         return this._shardingManager;
     }
     private static _shardingFunc: Function;

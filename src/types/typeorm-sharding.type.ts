@@ -4,9 +4,16 @@ import { AuroraPostgresConnectionOptions } from 'typeorm/driver/aurora-postgres/
 import { MysqlConnectionOptions } from 'typeorm/driver/mysql/MysqlConnectionOptions';
 import { OracleConnectionOptions } from 'typeorm/driver/oracle/OracleConnectionOptions';
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
+import { SqliteConnectionOptions } from 'typeorm/driver/sqlite/SqliteConnectionOptions';
+import { BetterSqlite3ConnectionOptions } from 'typeorm/driver/better-sqlite3/BetterSqlite3ConnectionOptions';
+import { DataSource } from 'typeorm';
 
 export interface AbstractShardingDataSource<S, T extends BaseDataSourceOptions> extends BaseDataSourceOptions {
-    shards: Array<Omit<T, keyof BaseDataSourceOptions> & S>;
+    shards: Array<
+        Omit<T, keyof BaseDataSourceOptions> & {
+            onInitialize?: (dataSource: DataSource) => Promise<void>;
+        } & S
+    >;
 }
 
 export interface PostgresShardingDataSource<S> extends AbstractShardingDataSource<S, PostgresConnectionOptions> {
@@ -29,14 +36,24 @@ export interface OracleShardingDataSource<S> extends AbstractShardingDataSource<
     type: 'oracle';
 }
 
-// ... "cockroachdb" | "sap" | "sqlite" | "cordova" | "react-native" | "nativescript" | "sqljs" | "mssql" | "mongodb" | "expo" | "better-sqlite3" | "capacitor" | "spanner"
+export interface SqliteShardingDataSource<S> extends AbstractShardingDataSource<S, SqliteConnectionOptions> {
+    type: 'sqlite';
+}
+
+export interface BetterSqlite3ShardingDataSource<S> extends AbstractShardingDataSource<S, BetterSqlite3ConnectionOptions> {
+    type: 'better-sqlite3';
+}
+
+// ... "cockroachdb" | "sap" | "cordova" | "react-native" | "nativescript" | "sqljs" | "mssql" | "mongodb" | "expo" | "capacitor" | "spanner"
 
 export type AbstractShardingDataSourceOptions<S = {}> =
     | PostgresShardingDataSource<S>
     | AuroraPostgresShardingDataSource<S>
     | MysqlShardingDataSource<S>
     | AuroraMysqlShardingDataSource<S>
-    | OracleShardingDataSource<S>;
+    | OracleShardingDataSource<S>
+    | SqliteShardingDataSource<S>
+    | BetterSqlite3ShardingDataSource<S>;
 
 export enum ShardingType {
     RANGE = 'RANGE',
