@@ -1,5 +1,5 @@
 # TypeORM Sharding Repository
-- TypeORM을 sharding을 통해 분산 데이터베이스 환경에서 활용할 수 있게 합니다.
+- TypeORM을 분산 데이터베이스 환경에서 활용할 수 있게 합니다.
 
 [![Node.js CI](https://github.com/kibae/typeorm-sharding-repo/actions/workflows/node.js.yml/badge.svg)](https://github.com/kibae/typeorm-sharding-repo/actions/workflows/node.js.yml)
 [![NPM Version](https://badge.fury.io/js/typeorm-sharding-repo.svg)](https://www.npmjs.com/package/typeorm-sharding-repo)
