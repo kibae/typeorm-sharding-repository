@@ -12,3 +12,9 @@ export class RepositoryService {
         else return new TypeormRepositoryService(entityType as any) as any;
     }
 }
+
+{
+    //To check if ShardingBaseEntity conforms to AbstractRepositoryService interface.
+    const __VALIDATION1__: AbstractRepositoryService<any> = ShardingBaseEntity;
+    const __VALIDATION2__: AbstractRepositoryService<any> = BaseEntity;
+}

@@ -1,5 +1,4 @@
-import { DataSource } from 'typeorm';
-import { DeepPartial } from 'typeorm/common/DeepPartial';
+import { DataSource, DeepPartial } from 'typeorm';
 import { ShardingBaseEntity } from './sharding-base-entity';
 import { ShardingDataSourceOptions, ShardingType } from './types/typeorm-sharding.type';
 import { DataSourceOptions } from 'typeorm/data-source/DataSourceOptions';

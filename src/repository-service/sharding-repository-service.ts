@@ -1,15 +1,17 @@
-import { ShardingBaseEntity } from '../sharding-base-entity';
-import { DeepPartial } from 'typeorm/common/DeepPartial';
-import { SaveOptions } from 'typeorm/repository/SaveOptions';
-import { RemoveOptions } from 'typeorm/repository/RemoveOptions';
-import { ObjectID } from 'typeorm/browser/driver/mongodb/typings';
-import { FindOptionsWhere } from 'typeorm/browser/find-options/FindOptionsWhere';
-import { QueryDeepPartialEntity } from 'typeorm/browser/query-builder/QueryPartialEntity';
-import { UpdateResult } from 'typeorm/browser/query-builder/result/UpdateResult';
-import { DeleteResult } from 'typeorm/browser/query-builder/result/DeleteResult';
-import { FindManyOptions } from 'typeorm/browser/find-options/FindManyOptions';
-import { FindOneOptions } from 'typeorm/browser/find-options/FindOneOptions';
+import {
+    DeepPartial,
+    SaveOptions,
+    RemoveOptions,
+    ObjectID,
+    FindOptionsWhere,
+    UpdateResult,
+    DeleteResult,
+    FindManyOptions,
+    FindOneOptions,
+} from 'typeorm';
+import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { AbstractRepositoryService } from './abstract-repository-service';
+import { ShardingBaseEntity } from '../sharding-base-entity';
 
 export class ShardingRepositoryService<
     Entity extends ShardingBaseEntity,

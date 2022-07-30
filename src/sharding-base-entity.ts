@@ -1,14 +1,18 @@
-import { DataSource, EntityManager, Repository } from 'typeorm';
-import { ObjectID } from 'typeorm/browser/driver/mongodb/typings';
-import { FindManyOptions } from 'typeorm/browser/find-options/FindManyOptions';
-import { FindOneOptions } from 'typeorm/browser/find-options/FindOneOptions';
-import { FindOptionsWhere } from 'typeorm/browser/find-options/FindOptionsWhere';
-import { QueryDeepPartialEntity } from 'typeorm/browser/query-builder/QueryPartialEntity';
-import { DeleteResult } from 'typeorm/browser/query-builder/result/DeleteResult';
-import { UpdateResult } from 'typeorm/browser/query-builder/result/UpdateResult';
-import { DeepPartial } from 'typeorm/common/DeepPartial';
-import { RemoveOptions } from 'typeorm/repository/RemoveOptions';
-import { SaveOptions } from 'typeorm/repository/SaveOptions';
+import {
+    DataSource,
+    DeepPartial,
+    DeleteResult,
+    EntityManager,
+    FindManyOptions,
+    FindOneOptions,
+    FindOptionsWhere,
+    ObjectID,
+    RemoveOptions,
+    Repository,
+    SaveOptions,
+    UpdateResult,
+} from 'typeorm';
+import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { ObjectUtils } from 'typeorm/util/ObjectUtils';
 import { ShardingManager } from './sharding-manager';
 
