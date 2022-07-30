@@ -78,7 +78,55 @@ export class User extends ShardingBaseEntity {
 }
 ```
 
-### 3. Use repository
+### 3. RepositoryService (Abstract repository for TypeORM.BaseEntity and ShardingBaseEntity)
+- `RepositoryService` compatible with TypeORM.BaseEntity and ShardingBaseEntity.
+- With this pattern, changing whether or not sharding is applied does not change the code.
+- [Repository Interface](https://github.com/kibae/typeorm-sharding-repo/tree/main/src/repository-service/abstract-repository-service.ts)
+```typescript
+// Both repository services have the same interface. 
+const typeormRepository = RepositoryService.of(MyEntityBasedOnTypeormBaseEntity);
+const shardingRepository = RepositoryService.of(MyEntityBasedOnShardingBaseEntity);
+
+interface AbstractRepositoryService<Entity> {
+    create(entityLike: DeepPartial<Entity>): Entity | Entity[];
+    create(entityLike: DeepPartial<Entity>): Entity | Entity[];
+    create(entityLike?: DeepPartial<Entity> | DeepPartial<Entity>[]): Entity | Entity[];
+
+    save(entities: DeepPartial<Entity>[], options?: SaveOptions): Promise<Entity[]>;
+    save(entity: DeepPartial<Entity>, options?: SaveOptions): Promise<Entity>;
+
+    remove(entities: Entity[], options?: RemoveOptions): Promise<Entity[]>;
+    remove(entity: Entity, options?: RemoveOptions): Promise<Entity>;
+
+    softRemove(entities: Entity[], options?: SaveOptions): Promise<Entity[]>;
+    softRemove(entity: Entity, options?: SaveOptions): Promise<Entity>;
+
+    update(
+        criteria: string | string[] | number | number[] | Date | Date[] | ObjectID | ObjectID[] | FindOptionsWhere<Entity>,
+        partialEntity: QueryDeepPartialEntity<Entity>
+    ): Promise<UpdateResult>;
+
+    delete(
+        criteria: string | string[] | number | number[] | Date | Date[] | ObjectID | ObjectID[] | FindOptionsWhere<Entity>
+    ): Promise<DeleteResult>;
+
+    count(options?: FindManyOptions<Entity>): Promise<number>;
+    countBy(where: FindOptionsWhere<Entity>): Promise<number>;
+
+    find(options?: FindManyOptions<Entity>): Promise<Entity[]>;
+    findBy(where: FindOptionsWhere<Entity>): Promise<Entity[]>;
+
+    findAndCount(options?: FindManyOptions<Entity>): Promise<[Entity[], number]>;
+    findAndCountBy(where: FindOptionsWhere<Entity>): Promise<[Entity[], number]>;
+
+    findOne(options: FindOneOptions<Entity>): Promise<Entity | null | undefined>;
+    findOneBy(where: FindOptionsWhere<Entity>): Promise<Entity | null | undefined>;
+    findOneById(id: string | number | Date | ObjectID): Promise<Entity | null>;
+    findByIds(ids: any[]): Promise<Entity[]>;
+}
+```
+
+### 4. Use repository
 - [This test code will help you.](https://github.com/kibae/typeorm-sharding-repo/blob/main/src/test/sharding-manager.spec.ts), [(Case1 Entity)](https://github.com/kibae/typeorm-sharding-repo/blob/main/src/test/entity/case1.ts) 
 ```typescript
 // Provides almost the same functionality as BaseEntity.
@@ -101,6 +149,10 @@ await entity.reload();
 //     \   \       |  |      /  /_\  \    |  |     |  | |  |     
 // .----)   |      |  |     /  _____  \   |  |     |  | |  `----.
 // |_______/       |__|    /__/     \__\  |__|     |__|  \______|
+
+// Create entity instance
+Case1.create();
+Case1.create({firstName: 'Typeorm', ...});
 
 // Returns all entities from all shards. Sort order is not guaranteed.
 await Case1.find();

@@ -77,8 +77,56 @@ export class User extends ShardingBaseEntity {
 }
 ```
 
-### 3. Use repository
-- [테스트 코드를 참조하세요.](https://github.com/kibae/typeorm-sharding-repo/blob/main/src/test/sharding-manager.spec.ts), [(Case1 Entity)](https://github.com/kibae/typeorm-sharding-repo/blob/main/src/test/entity/case1.ts) 
+### 3. RepositoryService (Abstract repository for TypeORM.BaseEntity and ShardingBaseEntity)
+- TypeORM.BaseEntity과 ShardingBaseEntity와 호횐되는 `RepositoryService`를 제공합니다.
+- 이 패턴을 활용할 경우 sharding 적용 여부를 변경하더라도 코드의 변경이 없습니다.
+- [Repository Interface](https://github.com/kibae/typeorm-sharding-repo/tree/main/src/repository-service/abstract-repository-service.ts)
+```typescript
+// 두 저장소 서비스는 동일한 인터페이스를 가지고 있습니다. 
+const typeormRepository = RepositoryService.of(MyEntityBasedOnTypeormBaseEntity);
+const shardingRepository = RepositoryService.of(MyEntityBasedOnShardingBaseEntity);
+
+interface AbstractRepositoryService<Entity> {
+    create(entityLike: DeepPartial<Entity>): Entity | Entity[];
+    create(entityLike: DeepPartial<Entity>): Entity | Entity[];
+    create(entityLike?: DeepPartial<Entity> | DeepPartial<Entity>[]): Entity | Entity[];
+
+    save(entities: DeepPartial<Entity>[], options?: SaveOptions): Promise<Entity[]>;
+    save(entity: DeepPartial<Entity>, options?: SaveOptions): Promise<Entity>;
+
+    remove(entities: Entity[], options?: RemoveOptions): Promise<Entity[]>;
+    remove(entity: Entity, options?: RemoveOptions): Promise<Entity>;
+
+    softRemove(entities: Entity[], options?: SaveOptions): Promise<Entity[]>;
+    softRemove(entity: Entity, options?: SaveOptions): Promise<Entity>;
+
+    update(
+        criteria: string | string[] | number | number[] | Date | Date[] | ObjectID | ObjectID[] | FindOptionsWhere<Entity>,
+        partialEntity: QueryDeepPartialEntity<Entity>
+    ): Promise<UpdateResult>;
+
+    delete(
+        criteria: string | string[] | number | number[] | Date | Date[] | ObjectID | ObjectID[] | FindOptionsWhere<Entity>
+    ): Promise<DeleteResult>;
+
+    count(options?: FindManyOptions<Entity>): Promise<number>;
+    countBy(where: FindOptionsWhere<Entity>): Promise<number>;
+
+    find(options?: FindManyOptions<Entity>): Promise<Entity[]>;
+    findBy(where: FindOptionsWhere<Entity>): Promise<Entity[]>;
+
+    findAndCount(options?: FindManyOptions<Entity>): Promise<[Entity[], number]>;
+    findAndCountBy(where: FindOptionsWhere<Entity>): Promise<[Entity[], number]>;
+
+    findOne(options: FindOneOptions<Entity>): Promise<Entity | null | undefined>;
+    findOneBy(where: FindOptionsWhere<Entity>): Promise<Entity | null | undefined>;
+    findOneById(id: string | number | Date | ObjectID): Promise<Entity | null>;
+    findByIds(ids: any[]): Promise<Entity[]>;
+}
+```
+
+### 4. Entity [static] method
+- [테스트 코드를 참조하세요.](https://github.com/kibae/typeorm-sharding-repo/blob/main/src/test/sharding-manager.spec.ts), [(Case1 Entity)](https://github.com/kibae/typeorm-sharding-repo/blob/main/src/test/entity/case1.ts)
 ```typescript
 // TypeORM.BaseEntity와 거의 동일한 기능들을 제공합니다.
 const entity = await Case1.save({
@@ -100,6 +148,10 @@ await entity.reload();
 //     \   \       |  |      /  /_\  \    |  |     |  | |  |     
 // .----)   |      |  |     /  _____  \   |  |     |  | |  `----.
 // |_______/       |__|    /__/     \__\  |__|     |__|  \______|
+
+// Entity instance를 생성합니다.
+Case1.create();
+Case1.create({firstName: 'Typeorm', ...});
 
 // 모든 shard의 모든 entity를 반환합니다. 정렬 순서는 보장되지 않습니다.
 await Case1.find();

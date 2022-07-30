@@ -59,24 +59,18 @@ export class ShardingBaseEntity {
     }
 
     static save<T extends ShardingBaseEntity>(
-        this: {
-            new (): T;
-        } & typeof ShardingBaseEntity,
+        this: { new (): T } & typeof ShardingBaseEntity,
         entities: DeepPartial<T>[],
         options?: SaveOptions
     ): Promise<T[]>;
     static save<T extends ShardingBaseEntity>(
-        this: {
-            new (): T;
-        } & typeof ShardingBaseEntity,
+        this: { new (): T } & typeof ShardingBaseEntity,
         entity: DeepPartial<T>,
         options?: SaveOptions
     ): Promise<T>;
 
     static async save<T extends ShardingBaseEntity>(
-        this: {
-            new (): T;
-        } & typeof ShardingBaseEntity,
+        this: { new (): T } & typeof ShardingBaseEntity,
         entities: DeepPartial<T> | DeepPartial<T>[],
         options?: SaveOptions
     ): Promise<T | T[]> {
@@ -90,25 +84,34 @@ export class ShardingBaseEntity {
     }
 
     ////
+    static create<T extends ShardingBaseEntity>(this: { new (): T } & typeof ShardingBaseEntity, entityLikeArray: DeepPartial<T>[]): T[];
+    static create<T extends ShardingBaseEntity>(this: { new (): T } & typeof ShardingBaseEntity, entityLike?: DeepPartial<T>): T;
+    static create<T extends ShardingBaseEntity>(
+        this: { new (): T } & typeof ShardingBaseEntity,
+        entities?: DeepPartial<T> | DeepPartial<T>[]
+    ): T | T[] {
+        if (!entities) return this.getRepository({} as T).create();
+
+        const isArray = Array.isArray(entities);
+        entities = (isArray ? entities : [entities]) as T[];
+        const result = entities.map((item) => this.getRepository(item).create(item));
+        return isArray ? result : result[0];
+    }
+
+    ////
     static remove<T extends ShardingBaseEntity>(
-        this: {
-            new (): T;
-        } & typeof ShardingBaseEntity,
+        this: { new (): T } & typeof ShardingBaseEntity,
         entities: T[],
         options?: RemoveOptions
     ): Promise<T[]>;
     static remove<T extends ShardingBaseEntity>(
-        this: {
-            new (): T;
-        } & typeof ShardingBaseEntity,
+        this: { new (): T } & typeof ShardingBaseEntity,
         entity: T,
         options?: RemoveOptions
     ): Promise<T>;
 
     static remove<T extends ShardingBaseEntity>(
-        this: {
-            new (): T;
-        } & typeof ShardingBaseEntity,
+        this: { new (): T } & typeof ShardingBaseEntity,
         entities: T | T[],
         options?: RemoveOptions
     ): Promise<T | T[]> {
@@ -119,24 +122,18 @@ export class ShardingBaseEntity {
 
     ////
     static softRemove<T extends ShardingBaseEntity>(
-        this: {
-            new (): T;
-        } & typeof ShardingBaseEntity,
+        this: { new (): T } & typeof ShardingBaseEntity,
         entities: T[],
         options?: SaveOptions
     ): Promise<T[]>;
     static softRemove<T extends ShardingBaseEntity>(
-        this: {
-            new (): T;
-        } & typeof ShardingBaseEntity,
+        this: { new (): T } & typeof ShardingBaseEntity,
         entity: T,
         options?: SaveOptions
     ): Promise<T>;
 
     static softRemove<T extends ShardingBaseEntity>(
-        this: {
-            new (): T;
-        } & typeof ShardingBaseEntity,
+        this: { new (): T } & typeof ShardingBaseEntity,
         entities: T | T[],
         options?: SaveOptions
     ): Promise<T | T[]> {
@@ -147,9 +144,7 @@ export class ShardingBaseEntity {
 
     ////
     static async update<T extends ShardingBaseEntity>(
-        this: {
-            new (): T;
-        } & typeof ShardingBaseEntity,
+        this: { new (): T } & typeof ShardingBaseEntity,
         criteria: string | string[] | number | number[] | Date | Date[] | ObjectID | ObjectID[] | FindOptionsWhere<T>,
         partialEntity: QueryDeepPartialEntity<T>
     ): Promise<UpdateResult> {
@@ -172,9 +167,7 @@ export class ShardingBaseEntity {
 
     ////
     static async delete<T extends ShardingBaseEntity>(
-        this: {
-            new (): T;
-        } & typeof ShardingBaseEntity,
+        this: { new (): T } & typeof ShardingBaseEntity,
         criteria: string | string[] | number | number[] | Date | Date[] | ObjectID | ObjectID[] | FindOptionsWhere<T>
     ): Promise<DeleteResult> {
         return (await Promise.all(this.getAllRepository<T>().map((repo) => repo.delete(criteria as any)))).reduce<DeleteResult>(
@@ -192,9 +185,7 @@ export class ShardingBaseEntity {
 
     ////
     static async count<T extends ShardingBaseEntity>(
-        this: {
-            new (): T;
-        } & typeof ShardingBaseEntity,
+        this: { new (): T } & typeof ShardingBaseEntity,
         options?: FindManyOptions<T>
     ): Promise<number> {
         return (await Promise.all(this.getAllRepository<T>().map((repo) => repo.count(options as any)))).reduce(
@@ -205,9 +196,7 @@ export class ShardingBaseEntity {
 
     ////
     static async countBy<T extends ShardingBaseEntity>(
-        this: {
-            new (): T;
-        } & typeof ShardingBaseEntity,
+        this: { new (): T } & typeof ShardingBaseEntity,
         where: FindOptionsWhere<T>
     ): Promise<number> {
         return (await Promise.all(this.getAllRepository<T>().map((repo) => repo.countBy(where as any)))).reduce(
@@ -218,9 +207,7 @@ export class ShardingBaseEntity {
 
     ////
     static async find<T extends ShardingBaseEntity>(
-        this: {
-            new (): T;
-        } & typeof ShardingBaseEntity,
+        this: { new (): T } & typeof ShardingBaseEntity,
         options?: FindManyOptions<T>
     ): Promise<T[]> {
         return (await Promise.all(this.getAllRepository<T>().map((repo) => repo.find(options as any)))).reduce<T[]>((accum, result) => {
@@ -231,9 +218,7 @@ export class ShardingBaseEntity {
 
     ////
     static async findBy<T extends ShardingBaseEntity>(
-        this: {
-            new (): T;
-        } & typeof ShardingBaseEntity,
+        this: { new (): T } & typeof ShardingBaseEntity,
         where: FindOptionsWhere<T>
     ): Promise<T[]> {
         return (await Promise.all(this.getAllRepository<T>().map((repo) => repo.findBy(where as any)))).reduce<T[]>((accum, result) => {
@@ -244,9 +229,7 @@ export class ShardingBaseEntity {
 
     ////
     static async findAndCount<T extends ShardingBaseEntity>(
-        this: {
-            new (): T;
-        } & typeof ShardingBaseEntity,
+        this: { new (): T } & typeof ShardingBaseEntity,
         options?: FindManyOptions<T>
     ): Promise<[T[], number]> {
         return (await Promise.all(this.getAllRepository<T>().map((repo) => repo.findAndCount(options as any)))).reduce<[T[], number]>(
@@ -261,9 +244,7 @@ export class ShardingBaseEntity {
 
     ////
     static async findAndCountBy<T extends ShardingBaseEntity>(
-        this: {
-            new (): T;
-        } & typeof ShardingBaseEntity,
+        this: { new (): T } & typeof ShardingBaseEntity,
         where: FindOptionsWhere<T>
     ): Promise<[T[], number]> {
         return (await Promise.all(this.getAllRepository<T>().map((repo) => repo.findAndCountBy(where as any)))).reduce<[T[], number]>(
@@ -277,12 +258,7 @@ export class ShardingBaseEntity {
     }
 
     ////
-    static async findByIds<T extends ShardingBaseEntity>(
-        this: {
-            new (): T;
-        } & typeof ShardingBaseEntity,
-        ids: any[]
-    ): Promise<T[]> {
+    static async findByIds<T extends ShardingBaseEntity>(this: { new (): T } & typeof ShardingBaseEntity, ids: any[]): Promise<T[]> {
         const slices: [DataSource, any[]][] = [];
         ids.forEach((id) => {
             const dataSource = this.getDataSourceById(id);
@@ -304,9 +280,7 @@ export class ShardingBaseEntity {
 
     ////
     static async findOne<T extends ShardingBaseEntity>(
-        this: {
-            new (): T;
-        } & typeof ShardingBaseEntity,
+        this: { new (): T } & typeof ShardingBaseEntity,
         options: FindOneOptions<T>
     ): Promise<T | null | undefined> {
         return (await Promise.all(this.getAllRepository<T>().map((repo: Repository<T>) => repo.findOne(options as any)))).find((v) => !!v);
@@ -314,9 +288,7 @@ export class ShardingBaseEntity {
 
     ////
     static async findOneBy<T extends ShardingBaseEntity>(
-        this: {
-            new (): T;
-        } & typeof ShardingBaseEntity,
+        this: { new (): T } & typeof ShardingBaseEntity,
         where: FindOptionsWhere<T>
     ): Promise<T | null | undefined> {
         return (await Promise.all(this.getAllRepository<T>().map((repo) => repo.findOneBy(where as any)))).find((v) => !!v);
@@ -324,9 +296,7 @@ export class ShardingBaseEntity {
 
     ////
     static findOneById<T extends ShardingBaseEntity>(
-        this: {
-            new (): T;
-        } & typeof ShardingBaseEntity,
+        this: { new (): T } & typeof ShardingBaseEntity,
         id: string | number | Date | ObjectID
     ): Promise<T | null> {
         return this.getDataSourceById(id).getRepository<T>(this).findOneById(id);
