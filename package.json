@@ -1,11 +1,11 @@
 {
-  "name": "typeorm-sharding-repo",
-  "version": "0.2.0",
+  "name": "typeorm-sharding-repository",
+  "version": "0.3.0",
   "description": "TypeORM Sharding Repository: Enables TypeORM to be utilized in a distributed database environment.",
-  "homepage": "https://github.com/kibae/typeorm-sharding-repo",
+  "homepage": "https://github.com/kibae/typeorm-sharding-repository",
   "repository": {
     "type": "git",
-    "url": "https://github.com/kibae/typeorm-sharding-repo.git"
+    "url": "https://github.com/kibae/typeorm-sharding-repository.git"
   },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

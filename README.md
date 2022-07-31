@@ -1,19 +1,19 @@
 # TypeORM Sharding Repository
 - Enables TypeORM to be utilized in a distributed database environment.
 
-[![Node.js CI](https://github.com/kibae/typeorm-sharding-repo/actions/workflows/node.js.yml/badge.svg)](https://github.com/kibae/typeorm-sharding-repo/actions/workflows/node.js.yml)
-[![NPM Version](https://badge.fury.io/js/typeorm-sharding-repo.svg)](https://www.npmjs.com/package/typeorm-sharding-repo)
-[![License](https://img.shields.io/github/license/kibae/typeorm-sharding-repo)](https://github.com/kibae/typeorm-sharding-repo/blob/main/LICENSE)
+[![Node.js CI](https://github.com/kibae/typeorm-sharding-repository/actions/workflows/node.js.yml/badge.svg)](https://github.com/kibae/typeorm-sharding-repository/actions/workflows/node.js.yml)
+[![NPM Version](https://badge.fury.io/js/typeorm-sharding-repository.svg)](https://www.npmjs.com/package/typeorm-sharding-repository)
+[![License](https://img.shields.io/github/license/kibae/typeorm-sharding-repository)](https://github.com/kibae/typeorm-sharding-repository/blob/main/LICENSE)
 
 ## Install
 - NPM
 ```shell
-$ npm install typeorm-sharding-repo --save
+$ npm install typeorm-sharding-repository --save
 ```
 
 - Yarn
 ```shell
-$ yarn add typeorm-sharding-repo
+$ yarn add typeorm-sharding-repository
 ```
 
 ----
@@ -81,7 +81,7 @@ export class User extends ShardingBaseEntity {
 ### 3. RepositoryService (Abstract repository for TypeORM.BaseEntity and ShardingBaseEntity)
 - `RepositoryService` compatible with TypeORM.BaseEntity and ShardingBaseEntity.
 - With this pattern, changing whether or not sharding is applied does not change the code.
-- [Repository Interface](https://github.com/kibae/typeorm-sharding-repo/tree/main/src/repository-service/abstract-repository-service.ts)
+- [Repository Interface](https://github.com/kibae/typeorm-sharding-repository/tree/main/src/repository-service/abstract-repository-service.ts)
 ```typescript
 // Both repository services have the same interface. 
 const typeormRepository = RepositoryService.of(MyEntityBasedOnTypeormBaseEntity);
@@ -126,8 +126,8 @@ interface AbstractRepositoryService<Entity> {
 }
 ```
 
-### 4. Use repository
-- [This test code will help you.](https://github.com/kibae/typeorm-sharding-repo/blob/main/src/test/sharding-manager.spec.ts), [(Case1 Entity)](https://github.com/kibae/typeorm-sharding-repo/blob/main/src/test/entity/case1.ts) 
+### 4. Entity [static] method
+- [This test code will help you.](https://github.com/kibae/typeorm-sharding-repository/blob/main/src/test/sharding-manager.spec.ts), [(Case1 Entity)](https://github.com/kibae/typeorm-sharding-repository/blob/main/src/test/entity/case1.ts) 
 ```typescript
 // Provides almost the same functionality as BaseEntity.
 const entity = await Case1.save({
@@ -206,6 +206,6 @@ Case1.getManager<Case1>(entity);
 ----
 
 ## Contributors
-<a href="https://github.com/kibae/typeorm-sharding-repo/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=kibae/typeorm-sharding-repo" />
+<a href="https://github.com/kibae/typeorm-sharding-repository/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=kibae/typeorm-sharding-repository" />
 </a>

@@ -1,19 +1,19 @@
 # TypeORM Sharding Repository
 - TypeORM을 분산 데이터베이스 환경에서 활용할 수 있게 합니다.
 
-[![Node.js CI](https://github.com/kibae/typeorm-sharding-repo/actions/workflows/node.js.yml/badge.svg)](https://github.com/kibae/typeorm-sharding-repo/actions/workflows/node.js.yml)
-[![NPM Version](https://badge.fury.io/js/typeorm-sharding-repo.svg)](https://www.npmjs.com/package/typeorm-sharding-repo)
-[![License](https://img.shields.io/github/license/kibae/typeorm-sharding-repo)](https://github.com/kibae/typeorm-sharding-repo/blob/main/LICENSE)
+[![Node.js CI](https://github.com/kibae/typeorm-sharding-repository/actions/workflows/node.js.yml/badge.svg)](https://github.com/kibae/typeorm-sharding-repository/actions/workflows/node.js.yml)
+[![NPM Version](https://badge.fury.io/js/typeorm-sharding-repository.svg)](https://www.npmjs.com/package/typeorm-sharding-repository)
+[![License](https://img.shields.io/github/license/kibae/typeorm-sharding-repository)](https://github.com/kibae/typeorm-sharding-repository/blob/main/LICENSE)
 
 ## Install
 - NPM
 ```shell
-$ npm install typeorm-sharding-repo --save
+$ npm install typeorm-sharding-repository --save
 ```
 
 - Yarn
 ```shell
-$ yarn add typeorm-sharding-repo
+$ yarn add typeorm-sharding-repository
 ```
 
 ----
@@ -80,7 +80,7 @@ export class User extends ShardingBaseEntity {
 ### 3. RepositoryService (Abstract repository for TypeORM.BaseEntity and ShardingBaseEntity)
 - TypeORM.BaseEntity과 ShardingBaseEntity와 호횐되는 `RepositoryService`를 제공합니다.
 - 이 패턴을 활용할 경우 sharding 적용 여부를 변경하더라도 코드의 변경이 없습니다.
-- [Repository Interface](https://github.com/kibae/typeorm-sharding-repo/tree/main/src/repository-service/abstract-repository-service.ts)
+- [Repository Interface](https://github.com/kibae/typeorm-sharding-repository/tree/main/src/repository-service/abstract-repository-service.ts)
 ```typescript
 // 두 저장소 서비스는 동일한 인터페이스를 가지고 있습니다. 
 const typeormRepository = RepositoryService.of(MyEntityBasedOnTypeormBaseEntity);
@@ -126,7 +126,7 @@ interface AbstractRepositoryService<Entity> {
 ```
 
 ### 4. Entity [static] method
-- [테스트 코드를 참조하세요.](https://github.com/kibae/typeorm-sharding-repo/blob/main/src/test/sharding-manager.spec.ts), [(Case1 Entity)](https://github.com/kibae/typeorm-sharding-repo/blob/main/src/test/entity/case1.ts)
+- [테스트 코드를 참조하세요.](https://github.com/kibae/typeorm-sharding-repository/blob/main/src/test/sharding-manager.spec.ts), [(Case1 Entity)](https://github.com/kibae/typeorm-sharding-repository/blob/main/src/test/entity/case1.ts)
 ```typescript
 // TypeORM.BaseEntity와 거의 동일한 기능들을 제공합니다.
 const entity = await Case1.save({
@@ -205,6 +205,6 @@ Case1.getManager<Case1>(entity);
 ----
 
 ## Contributors
-<a href="https://github.com/kibae/typeorm-sharding-repo/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=kibae/typeorm-sharding-repo" />
+<a href="https://github.com/kibae/typeorm-sharding-repository/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=kibae/typeorm-sharding-repository" />
 </a>
