@@ -29,7 +29,10 @@ describe('ShardingManager', () => {
     });
 
     afterEach(async () => {
-        dataSource?.destroy();
+        if (dataSource) {
+            await dataSource.destroy();
+            dataSource.dataSources.forEach((dataSource) => expect(dataSource.isInitialized).toEqual(false));
+        }
     });
 
     it('DataSource', async () => {

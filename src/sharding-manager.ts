@@ -73,10 +73,6 @@ export class ShardingManager {
 
     async destroy() {
         this._destroyed = true;
-        await Promise.all(
-            this.dataSources.map((dataSource) => {
-                dataSource.destroy();
-            })
-        );
+        await Promise.all(this.dataSources.map((dataSource) => dataSource.destroy()));
     }
 }
